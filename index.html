@@ -11,7 +11,15 @@
         background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         text-align: center;
+        animation: pulseBg 4s infinite alternate;
     }
+
+    @keyframes pulseBg {
+        0% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
+        50% {background: linear-gradient(to bottom, #ffd1e6, #ffe6f2);}
+        100% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
+    }
+
     h1 {
         color: #ff3366;
         font-size: 50px;
@@ -19,6 +27,7 @@
         opacity: 0;
         animation: fadeIn 2s forwards;
     }
+
     #message {
         color: #ff1a75;
         font-size: 24px;
@@ -29,6 +38,7 @@
         animation: fadeIn 2s forwards;
         animation-delay: 2s;
     }
+
     img {
         width: 300px;
         border-radius: 20px;
@@ -37,9 +47,9 @@
         animation: fadeIn 2s forwards;
         animation-delay: 6s;
     }
-    @keyframes fadeIn {
-        to {opacity:1;}
-    }
+
+    @keyframes fadeIn { to {opacity:1;} }
+
     .heart {
         position: absolute;
         width: 20px;
@@ -60,9 +70,20 @@
     }
     .heart:before { top: -10px; left: 0; }
     .heart:after { top: 0; left: -10px; }
+
     @keyframes float {
         0% {transform: translateY(0) rotate(45deg);}
         100% {transform: translateY(-800px) rotate(45deg);}
+    }
+
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        opacity: 0.8;
+        top: -10px;
+        pointer-events: none;
     }
 </style>
 </head>
@@ -114,8 +135,39 @@
         setTimeout(() => heart.remove(), 8000);
     }
     setInterval(createHeart, 300);
+
+    // Confetti effect
+    const colors = ['#ff3366','#ff99cc','#ff66b3','#ff1a75','#ff4d94','#ff6699','#ff80bf'];
+    function createConfettiPiece() {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        const size = 5 + Math.random()*10;
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        document.body.appendChild(confetti);
+
+        let posY = -10;
+        const fallSpeed = 2 + Math.random()*3;
+        const sway = Math.random()*5;
+
+        const fall = setInterval(() => {
+            posY += fallSpeed;
+            confetti.style.top = posY + 'px';
+            confetti.style.left = parseFloat(confetti.style.left) + Math.sin(posY*0.1)*sway + 'px';
+            if(posY > window.innerHeight) {
+                confetti.remove();
+                clearInterval(fall);
+            }
+        }, 16);
+    }
+
+    // Continuous confetti
+    setInterval(createConfettiPiece, 50);
 </script>
 
 </body>
 </html>
+
 
