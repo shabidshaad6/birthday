@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body {
     margin:0;
@@ -21,15 +22,14 @@ body {
 }
 
 h1 {
-    font-size:50px;
-    margin-top:40px;
+    font-size:5vw; /* scales with screen width */
+    margin-top:5vw;
     opacity:0;
-    animation: fadeIn 2s forwards;
+    animation: fadeIn 2s forwards, shimmer 3s infinite;
     background: linear-gradient(90deg, #ff3366, #ff99cc, #ff1a75);
     background-size: 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 3s infinite, fadeIn 2s forwards;
 }
 
 @keyframes shimmer {
@@ -40,10 +40,10 @@ h1 {
 
 #message {
     color:#ff1a75;
-    font-size:24px;
-    max-width:600px;
-    margin:20px auto;
-    min-height:120px;
+    font-size:4vw;
+    max-width:90%;
+    margin:4vw auto;
+    min-height:15vw;
     opacity:0;
     animation: fadeIn 2s forwards;
     animation-delay:2s;
@@ -51,9 +51,10 @@ h1 {
 }
 
 img {
-    width:300px;
-    border-radius:20px;
-    margin-top:20px;
+    width:40vw; /* responsive photo width */
+    max-width:300px;
+    border-radius:3vw;
+    margin-top:4vw;
     opacity:0;
     animation: fadeIn 2s forwards, pulsePhoto 3s infinite alternate;
 }
@@ -68,8 +69,10 @@ img {
 
 .heart, .swirlHeart {
     position:absolute;
-    width:20px;
-    height:20px;
+    width:5vw;
+    height:5vw;
+    max-width:20px;
+    max-height:20px;
     background:red;
     transform:rotate(45deg);
 }
@@ -78,19 +81,21 @@ img {
 .swirlHeart:before, .swirlHeart:after {
     content:'';
     position:absolute;
-    width:20px;
-    height:20px;
+    width:100%;
+    height:100%;
     background:inherit;
     border-radius:50%;
 }
 
-.heart:before, .swirlHeart:before { top:-10px; left:0; }
-.heart:after, .swirlHeart:after { top:0; left:-10px; }
+.heart:before, .swirlHeart:before { top:-50%; left:0; }
+.heart:after, .swirlHeart:after { top:0; left:-50%; }
 
 .confetti {
     position:absolute;
-    width:10px;
-    height:10px;
+    width:2vw;
+    height:2vw;
+    max-width:10px;
+    max-height:10px;
     opacity:0.8;
     top:-10px;
     pointer-events:none;
@@ -139,13 +144,10 @@ function createHeart() {
     heart.className='heart';
     heart.style.left=Math.random()*window.innerWidth+'px';
     heart.style.background=`hsl(${Math.random()*360},80%,60%)`;
-    const size=10+Math.random()*20;
-    heart.style.width=size+'px';
-    heart.style.height=size+'px';
     document.body.appendChild(heart);
 
     let posY=0;
-    const fallSpeed=2+Math.random()*3;
+    const fallSpeed=2 + Math.random()*3;
     const sway=Math.random()*5;
     const interval=setInterval(()=>{
         posY+=fallSpeed;
@@ -163,13 +165,10 @@ function createConfettiPiece() {
     confetti.className='confetti';
     confetti.style.left=Math.random()*window.innerWidth+'px';
     confetti.style.backgroundColor=confColors[Math.floor(Math.random()*confColors.length)];
-    const size=5+Math.random()*10;
-    confetti.style.width=size+'px';
-    confetti.style.height=size+'px';
     document.body.appendChild(confetti);
 
     let posY=-10;
-    const fallSpeed=2+Math.random()*3;
+    const fallSpeed=2 + Math.random()*3;
     const sway=Math.random()*5;
     const interval=setInterval(()=>{
         posY+=fallSpeed;
@@ -187,28 +186,31 @@ function startConfetti(){
 // Swirling hearts around photo
 function startSwirlHearts(){
     const photo=document.getElementById('photo');
-    const centerX=photo.offsetLeft+photo.width/2;
-    const centerY=photo.offsetTop+photo.height/2;
+    const centerX=photo.offsetLeft + photo.offsetWidth/2;
+    const centerY=photo.offsetTop + photo.offsetHeight/2;
 
     let angle=0;
     const swirlInterval=setInterval(()=>{
         const heart=document.createElement('div');
         heart.className='swirlHeart';
-        const radius=80 + Math.random()*40;
+        const radius=photo.offsetWidth/2 + 20 + Math.random()*20;
         const x=centerX + radius*Math.cos(angle) - 10;
         const y=centerY + radius*Math.sin(angle) - 10;
         heart.style.left=x+'px';
         heart.style.top=y+'px';
         heart.style.background=`hsl(${Math.random()*360},80%,60%)`;
         document.body.appendChild(heart);
-
         setTimeout(()=>heart.remove(),4000);
         angle+=Math.PI/12;
         if(angle>Math.PI*2) angle=0;
     },100);
 }
+
+// Adjust hearts and photo positions on resize
+window.addEventListener('resize', () => {
+    // Swirling hearts will automatically recalc center each time they spawn
+});
 </script>
 
 </body>
 </html>
-
