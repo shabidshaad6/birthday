@@ -4,170 +4,211 @@
 <meta charset="UTF-8">
 <title>Happy Birthday ❤️</title>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-        animation: pulseBg 4s infinite alternate;
-    }
+body {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align:center;
+    animation: pulseBg 4s infinite alternate;
+}
 
-    @keyframes pulseBg {
-        0% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
-        50% {background: linear-gradient(to bottom, #ffd1e6, #ffe6f2);}
-        100% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
-    }
+@keyframes pulseBg {
+    0% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
+    50% {background: linear-gradient(to bottom, #ffd1e6, #ffe6f2);}
+    100% {background: linear-gradient(to bottom, #ffe6f0, #fff0f5);}
+}
 
-    h1 {
-        color: #ff3366;
-        font-size: 50px;
-        margin-top: 40px;
-        opacity: 0;
-        animation: fadeIn 2s forwards;
-    }
+h1 {
+    font-size:50px;
+    margin-top:40px;
+    opacity:0;
+    animation: fadeIn 2s forwards;
+    background: linear-gradient(90deg, #ff3366, #ff99cc, #ff1a75);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s infinite, fadeIn 2s forwards;
+}
 
-    #message {
-        color: #ff1a75;
-        font-size: 24px;
-        max-width: 600px;
-        margin: 20px auto;
-        min-height: 120px;
-        opacity: 0;
-        animation: fadeIn 2s forwards;
-        animation-delay: 2s;
-    }
+@keyframes shimmer {
+    0% {background-position:0%;}
+    50% {background-position:100%;}
+    100% {background-position:0%;}
+}
 
-    img {
-        width: 300px;
-        border-radius: 20px;
-        margin-top: 20px;
-        opacity: 0;
-        animation: fadeIn 2s forwards;
-        animation-delay: 6s;
-    }
+#message {
+    color:#ff1a75;
+    font-size:24px;
+    max-width:600px;
+    margin:20px auto;
+    min-height:120px;
+    opacity:0;
+    animation: fadeIn 2s forwards;
+    animation-delay:2s;
+    text-shadow: 0 0 5px #ff99cc, 0 0 10px #ff3366;
+}
 
-    @keyframes fadeIn { to {opacity:1;} }
+img {
+    width:300px;
+    border-radius:20px;
+    margin-top:20px;
+    opacity:0;
+    animation: fadeIn 2s forwards, pulsePhoto 3s infinite alternate;
+}
 
-    .heart {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: red;
-        transform: rotate(45deg);
-        top: 0;
-        animation: float linear infinite;
-    }
-    .heart:before,
-    .heart:after {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: inherit;
-        border-radius: 50%;
-    }
-    .heart:before { top: -10px; left: 0; }
-    .heart:after { top: 0; left: -10px; }
+@keyframes pulsePhoto {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.05);}
+    100% {transform: scale(1);}
+}
 
-    @keyframes float {
-        0% {transform: translateY(0) rotate(45deg);}
-        100% {transform: translateY(-800px) rotate(45deg);}
-    }
+@keyframes fadeIn { to {opacity:1;} }
 
-    .confetti {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: red;
-        opacity: 0.8;
-        top: -10px;
-        pointer-events: none;
-    }
+.heart, .swirlHeart {
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:red;
+    transform:rotate(45deg);
+}
+
+.heart:before, .heart:after,
+.swirlHeart:before, .swirlHeart:after {
+    content:'';
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:inherit;
+    border-radius:50%;
+}
+
+.heart:before, .swirlHeart:before { top:-10px; left:0; }
+.heart:after, .swirlHeart:after { top:0; left:-10px; }
+
+.confetti {
+    position:absolute;
+    width:10px;
+    height:10px;
+    opacity:0.8;
+    top:-10px;
+    pointer-events:none;
+}
 </style>
 </head>
 <body>
 
 <h1>Happy Birthday, Nadhirah ❤️</h1>
 <div id="message"></div>
-<img src="nadhirah.jpg" alt="Nadhirah">
+<img id="photo" src="nadhirah.jpg" alt="Nadhirah">
 
 <script>
-    // Typing effect for message
-    const lines = [
-        "My beautiful Nadhirah,",
-        "Every moment with you is special.",
-        "May your day be filled with love, laughter, and happiness.",
-        "You mean the world to me! ❤️"
-    ];
-    const messageDiv = document.getElementById('message');
-    let lineIndex = 0;
-    let charIndex = 0;
+// Typing effect for message
+const lines = [
+    "My beautiful Nadhirah,",
+    "Every moment with you is special.",
+    "May your day be filled with love, laughter, and happiness.",
+    "You mean the world to me! ❤️"
+];
+const messageDiv = document.getElementById('message');
+let lineIndex = 0, charIndex = 0;
 
-    function typeLine() {
-        if(lineIndex < lines.length){
-            if(charIndex < lines[lineIndex].length){
-                messageDiv.innerHTML += lines[lineIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(typeLine, 50);
-            } else {
-                messageDiv.innerHTML += "<br>";
-                lineIndex++;
-                charIndex = 0;
-                setTimeout(typeLine, 500);
-            }
+function typeLine() {
+    if(lineIndex < lines.length){
+        if(charIndex < lines[lineIndex].length){
+            messageDiv.innerHTML += lines[lineIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(typeLine, 50);
+        } else {
+            messageDiv.innerHTML += "<br>";
+            lineIndex++;
+            charIndex=0;
+            setTimeout(typeLine, 500);
         }
+    } else {
+        startConfetti(); 
+        startSwirlHearts();
     }
-    setTimeout(typeLine, 2000); // start typing after fade-in
+}
+setTimeout(typeLine, 2000);
 
-    // Floating hearts
-    function createHeart() {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
-        const size = 10 + Math.random()*20;
-        heart.style.width = size + 'px';
-        heart.style.height = size + 'px';
-        heart.style.animationDuration = (5 + Math.random() * 3) + 's';
+// Floating hearts
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    heart.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    const size=10+Math.random()*20;
+    heart.style.width=size+'px';
+    heart.style.height=size+'px';
+    document.body.appendChild(heart);
+
+    let posY=0;
+    const fallSpeed=2+Math.random()*3;
+    const sway=Math.random()*5;
+    const interval=setInterval(()=>{
+        posY+=fallSpeed;
+        heart.style.top=posY+'px';
+        heart.style.left=parseFloat(heart.style.left)+Math.sin(posY*0.1)*sway+'px';
+        if(posY>window.innerHeight){ heart.remove(); clearInterval(interval);}
+    },16);
+}
+setInterval(createHeart,300);
+
+// Confetti effect
+const confColors=['#ff3366','#ff99cc','#ff66b3','#ff1a75','#ff4d94','#ff6699','#ff80bf'];
+function createConfettiPiece() {
+    const confetti=document.createElement('div');
+    confetti.className='confetti';
+    confetti.style.left=Math.random()*window.innerWidth+'px';
+    confetti.style.backgroundColor=confColors[Math.floor(Math.random()*confColors.length)];
+    const size=5+Math.random()*10;
+    confetti.style.width=size+'px';
+    confetti.style.height=size+'px';
+    document.body.appendChild(confetti);
+
+    let posY=-10;
+    const fallSpeed=2+Math.random()*3;
+    const sway=Math.random()*5;
+    const interval=setInterval(()=>{
+        posY+=fallSpeed;
+        confetti.style.top=posY+'px';
+        confetti.style.left=parseFloat(confetti.style.left)+Math.sin(posY*0.1)*sway+'px';
+        if(posY>window.innerHeight){ confetti.remove(); clearInterval(interval);}
+    },16);
+}
+
+function startConfetti(){
+    const confettiInterval=setInterval(createConfettiPiece,30);
+    setTimeout(()=>clearInterval(confettiInterval),7000);
+}
+
+// Swirling hearts around photo
+function startSwirlHearts(){
+    const photo=document.getElementById('photo');
+    const centerX=photo.offsetLeft+photo.width/2;
+    const centerY=photo.offsetTop+photo.height/2;
+
+    let angle=0;
+    const swirlInterval=setInterval(()=>{
+        const heart=document.createElement('div');
+        heart.className='swirlHeart';
+        const radius=80 + Math.random()*40;
+        const x=centerX + radius*Math.cos(angle) - 10;
+        const y=centerY + radius*Math.sin(angle) - 10;
+        heart.style.left=x+'px';
+        heart.style.top=y+'px';
+        heart.style.background=`hsl(${Math.random()*360},80%,60%)`;
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 8000);
-    }
-    setInterval(createHeart, 300);
 
-    // Confetti effect
-    const colors = ['#ff3366','#ff99cc','#ff66b3','#ff1a75','#ff4d94','#ff6699','#ff80bf'];
-    function createConfettiPiece() {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-        const size = 5 + Math.random()*10;
-        confetti.style.width = size + 'px';
-        confetti.style.height = size + 'px';
-        document.body.appendChild(confetti);
-
-        let posY = -10;
-        const fallSpeed = 2 + Math.random()*3;
-        const sway = Math.random()*5;
-
-        const fall = setInterval(() => {
-            posY += fallSpeed;
-            confetti.style.top = posY + 'px';
-            confetti.style.left = parseFloat(confetti.style.left) + Math.sin(posY*0.1)*sway + 'px';
-            if(posY > window.innerHeight) {
-                confetti.remove();
-                clearInterval(fall);
-            }
-        }, 16);
-    }
-
-    // Continuous confetti
-    setInterval(createConfettiPiece, 50);
+        setTimeout(()=>heart.remove(),4000);
+        angle+=Math.PI/12;
+        if(angle>Math.PI*2) angle=0;
+    },100);
+}
 </script>
 
 </body>
 </html>
-
 
